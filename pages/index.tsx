@@ -9,6 +9,7 @@ const Home: NextPage = () => {
       <Button color='gradient'>Hello world</Button>
     </Layout>
   )
+
 }
 
 export default Home
