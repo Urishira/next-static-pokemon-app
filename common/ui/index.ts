@@ -1,0 +1,1 @@
+import { NavbarPokemon } from './NavbarPokemon'
