@@ -31,6 +31,7 @@ const CardPokemon: FC<CartPokemonProps> = ({ img, name, numberPoke }) => {
   )
 }
 
+
 type PokemonPage = {
   pokemons: SmallPokemon[]
 }
