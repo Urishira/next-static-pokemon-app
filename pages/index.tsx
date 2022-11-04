@@ -1,6 +1,6 @@
 import { GetStaticProps } from 'next'
 import type { NextPage } from 'next'
-import { Button, Grid } from '@nextui-org/react'
+import { Button, Col, Grid, Row } from '@nextui-org/react'
 import { Layout } from '../common/layout'
 import { pokemonApi } from './api'
 import { PokemonApiTypes, SmallPokemon } from '../types'
@@ -11,38 +11,41 @@ import { FC } from 'react'
 type CartPokemonProps = {
   img: string
   name: string
+  numberPoke: string
 }
-const CardPokemon: FC<CartPokemonProps> = ({ img, name }) => {
+const CardPokemon: FC<CartPokemonProps> = ({ img, name, numberPoke }) => {
   return (
-    <Card css={{ p: '$6', mw: '400px' }}>
-      <Image alt="nextui logo" src={img} />
-      <Grid.Container css={{ pl: '$6' }}>
-        <Grid xs={12}>
-          <Text h4 css={{ lineHeight: '$xs' }}>
-            Next UI
-          </Text>
-        </Grid>
-        <Grid xs={12}>
-          <Text css={{ color: '$accents8' }}>nextui.org</Text>
-        </Grid>
-      </Grid.Container>
-      <Card.Body css={{ py: '$2' }}>
-        <Text>Make beautiful websites regardless of your design experience.</Text>
+    <Card isPressable>
+      <Card.Body css={{ p: 0 }}>
+        <Image src={img} objectFit="fill" width="100%" height={140} alt={name} />
       </Card.Body>
-      <Card.Footer>
-        <Link color="primary" target="_blank" href="https://github.com/nextui-org/nextui">
-          Visit source code on GitHub.
-        </Link>
+      <Card.Footer css={{ justifyItems: 'flex-start' }}>
+        <Row wrap="wrap" justify="space-between" align="center">
+          <Text b>{name}</Text>
+          <Text css={{ color: '$accents7', fontWeight: '$semibold', fontSize: '$sm' }}>
+            {numberPoke}
+          </Text>
+        </Row>
       </Card.Footer>
     </Card>
   )
 }
 
-const Home: NextPage = props => {
+
+type PokemonPage = {
+  pokemons: SmallPokemon[]
+}
+const Home: NextPage<PokemonPage> = ({ pokemons }) => {
   return (
     <Layout title="Pokemon-Home">
       <Button color="gradient">Hello world</Button>
-      <Grid>{props.pokemon.map()}</Grid>
+      <Grid.Container gap={2} justify="center">
+        {pokemons.map(({ id, img, name }) => (
+          <Grid xs={6} sm={2} key={id}>
+            <CardPokemon img={img} name={name} numberPoke={id as unknown as string} />
+          </Grid>
+        ))}
+      </Grid.Container>
     </Layout>
   )
 }
