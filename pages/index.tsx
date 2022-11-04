@@ -24,10 +24,9 @@ export const getStaticProps: GetStaticProps = async ctx => {
   const pokemons: SmallPokemon[] = data.results.map((pokeInfo, i) => {
     const idPoke = i + 1
     return {
+      ...pokeInfo,
       id: idPoke,
-      img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${idPoke}.svg`,
-      name: pokeInfo.name,
-      url: `https://pokeapi.co/api/v2/pokemon/${idPoke}/`
+      img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${idPoke}.svg`
     }
   })
 
@@ -37,5 +36,4 @@ export const getStaticProps: GetStaticProps = async ctx => {
     }
   }
 }
-
 export default Home
