@@ -7,15 +7,22 @@ import { PokemonApiTypes, SmallPokemon } from '../types'
 import { Card, Text, Link } from '@nextui-org/react'
 import Image from 'next/image'
 import { FC } from 'react'
+import { useRouter } from 'next/router'
 
 type CartPokemonProps = {
+  id: number
   img: string
   name: string
   numberPoke: string
 }
-const CardPokemon: FC<CartPokemonProps> = ({ img, name, numberPoke }) => {
+const CardPokemon: FC<CartPokemonProps> = ({ id, img, name, numberPoke }) => {
+  const route = useRouter()
+  const handleClickPokemon = () => {
+    console.log(id)
+    route.push(`pokemons/${id}`)
+  }
   return (
-    <Card isPressable>
+    <Card onClick={handleClickPokemon} isPressable>
       <Card.Body css={{ p: 0 }}>
         <Image src={img} objectFit="fill" width="100%" height={140} alt={name} />
       </Card.Body>
@@ -31,7 +38,6 @@ const CardPokemon: FC<CartPokemonProps> = ({ img, name, numberPoke }) => {
   )
 }
 
-
 type PokemonPage = {
   pokemons: SmallPokemon[]
 }
@@ -42,7 +48,7 @@ const Home: NextPage<PokemonPage> = ({ pokemons }) => {
       <Grid.Container gap={2} justify="center">
         {pokemons.map(({ id, img, name }) => (
           <Grid xs={6} sm={2} key={id}>
-            <CardPokemon img={img} name={name} numberPoke={id as unknown as string} />
+            <CardPokemon id={id} img={img} name={name} numberPoke={id as unknown as string} />
           </Grid>
         ))}
       </Grid.Container>
