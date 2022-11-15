@@ -1,41 +1,10 @@
 import { GetStaticProps } from 'next'
 import type { NextPage } from 'next'
-import { Button, Col, Grid, Row } from '@nextui-org/react'
 import { Layout } from '../common/layout'
 import { pokemonApi } from './api'
 import { PokemonApiTypes, SmallPokemon } from '../types'
-import { Card, Text, Link } from '@nextui-org/react'
-import Image from 'next/image'
-import { FC } from 'react'
-import { useRouter } from 'next/router'
 
-type CartPokemonProps = {
-  id: number
-  img: string
-  name: string
-  numberPoke: string
-}
-const CardPokemon: FC<CartPokemonProps> = ({ id, img, name, numberPoke }) => {
-  const route = useRouter()
-  const handleClickPokemon = () => {
-    route.push(`pokemons/${id}`)
-  }
-  return (
-    <Card onClick={handleClickPokemon} isPressable>
-      <Card.Body css={{ p: 0 }}>
-        <Image src={img} objectFit="fill" width="100%" height={140} alt={name} />
-      </Card.Body>
-      <Card.Footer css={{ justifyItems: 'flex-start' }}>
-        <Row wrap="wrap" justify="space-between" align="center">
-          <Text b>{name}</Text>
-          <Text css={{ color: '$accents7', fontWeight: '$semibold', fontSize: '$sm' }}>
-            {numberPoke}
-          </Text>
-        </Row>
-      </Card.Footer>
-    </Card>
-  )
-}
+import { CardPokemon } from '../common/ui/CardPokemon'
 
 type PokemonPage = {
   pokemons: SmallPokemon[]
@@ -43,13 +12,11 @@ type PokemonPage = {
 const Home: NextPage<PokemonPage> = ({ pokemons }) => {
   return (
     <Layout title="Pokemon-Home">
-      <Grid.Container gap={2} justify="center">
+      <div className="grid lg:grid-cols-5  sm:grid-cols-2 sm:grid-rows-1 gap-5">
         {pokemons.map(({ id, img, name }) => (
-          <Grid xs={6} sm={2} key={id}>
-            <CardPokemon id={id} img={img} name={name} numberPoke={id as unknown as string} />
-          </Grid>
+          <CardPokemon id={id} img={img} name={name} numberPoke={id as unknown as string} />
         ))}
-      </Grid.Container>
+      </div>
     </Layout>
   )
 }

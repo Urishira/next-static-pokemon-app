@@ -1,28 +1,25 @@
 import React from 'react'
 import Image from 'next/image'
-import { Navbar, Text } from '@nextui-org/react'
 import Link from 'next/link'
 
 export const NavbarPokemon = () => {
   return (
-    <Navbar isBordered>
-      <Navbar.Brand>
-        <Image
-          width={90}
-          height={90}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/132.png"
-        />
-        <Link href="/">
-          <Text h3 as={'a'} size="$4xl" color="inherit" hideIn="xs">
-            Pokemon
-          </Text>
-        </Link>
-      </Navbar.Brand>
-      <Navbar.Content>
-        <Navbar.Link color="inherit" href="/favorites">
-          Favorites
-        </Navbar.Link>
-      </Navbar.Content>
-    </Navbar>
+    <nav className="w-full h-5 flex items-center">
+      <Image
+        width={50}
+        height={50}
+        layout="fixed"
+        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/17.png"
+        alt="pokemon"
+      />
+
+      <Link href="/" passHref>
+        Pokemon
+      </Link>
+
+      <Link href="/favorites" passHref>
+        Favorite
+      </Link>
+    </nav>
   )
 }
