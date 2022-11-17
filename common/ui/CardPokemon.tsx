@@ -14,15 +14,18 @@ export const CardPokemon: FC<CartPokemonProps> = ({ id, img, name, numberPoke })
     route.push(`pokemons/${id}`)
   }
   return (
-    <div className="flex w-96 p-5 bg-white text-black">
+    <div className="card glass">
       <figure>
         <Image width={200} height={200} layout="intrinsic" src={img} alt={name} />
       </figure>
       <div className="card-body">
-        <h2 className="card-title text-4xl">
-          {name}#{numberPoke}
-        </h2>
-        <p>{name}</p>
+        <h2 className="card-title">Shoes!</h2>
+        <p>If a dog chews shoes whose shoes does he choose?</p>
+        <div className="card-actions justify-end">
+          <button onClick={handleClickPokemon} className="btn btn-">
+            See More
+          </button>
+        </div>
       </div>
     </div>
   )
