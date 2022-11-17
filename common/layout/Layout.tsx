@@ -17,7 +17,7 @@ export const Layout: FC<LayoutType> = ({ children, title }) => {
         <meta name="keywords" content="pokemon, pokedex" />
       </Head>
       <NavbarPokemon />
-      <main>{children}</main>
+      <main className="bg-black">{children}</main>
     </>
   )
 }

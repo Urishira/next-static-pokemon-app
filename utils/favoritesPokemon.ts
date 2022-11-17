@@ -3,6 +3,7 @@ const setFavoritePokemon = (id: number) => {
   if (pokemons.includes(id)) {
     pokemons = pokemons.filter(favorite => favorite !== id)
   } else {
+    pokemons = pokemons.sort()
     pokemons.push(id)
   }
   localStorage.setItem('favorites', JSON.stringify(pokemons))

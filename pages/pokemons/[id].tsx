@@ -3,13 +3,22 @@ import Image from 'next/image'
 import { Layout } from '../../common/layout'
 import { pokemonApi } from '../api'
 import { Pokefull } from '../../types'
-
+import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
+import { useEffect, useState } from 'react'
 type PokemonProps = {
   pokemon: Pokefull
 }
 
 const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
+  const [isFavorite, setIsFavorite] = useState(false)
   const ability = pokemon.abilities.map(value => value.ability.name)
+  useEffect(() => {
+    setIsFavorite(isFavoriteIdPokemon(pokemon.id))
+  }, [])
+  const handleClick = () => {
+    setFavoritePokemon(pokemon.id)
+    setIsFavorite(!isFavorite)
+  }
   return (
     <Layout title={pokemon.name || 'pokemon'}>
       <div className="grid grid-cols-2 gap-10">
@@ -34,7 +43,9 @@ const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
               fugiat inventore cumque nulla iste atque aut.
             </p>
             <div className="card-actions justify-end">
-              <button className="btn btn-secondary">add Favorite</button>
+              <button onClick={handleClick} className="btn btn-secondary">
+                {isFavorite ? 'Quit Favorite' : 'set Favorite'}
+              </button>
             </div>
           </div>
         </div>

@@ -12,9 +12,15 @@ type PokemonPage = {
 const Home: NextPage<PokemonPage> = ({ pokemons }) => {
   return (
     <Layout title="Pokemon-Home">
-      <div className="grid lg:grid-cols-4  sm:grid-cols-2 sm:grid-rows-1 gap-5">
+      <div className="grid lg:grid-cols-4 sm:grid-cols-2 sm:grid-rows-1 gap-5">
         {pokemons.map(({ id, img, name }) => (
-          <CardPokemon id={id} img={img} name={name} numberPoke={id as unknown as string} />
+          <CardPokemon
+            key={id}
+            id={id}
+            img={img}
+            name={name}
+            numberPoke={id as unknown as string}
+          />
         ))}
       </div>
     </Layout>
