@@ -1,42 +1,75 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
-
+import Image from 'next/image'
 import { Layout } from '../../common/layout'
-import { Ability, Sprites } from '../../types'
+import { pokemonApi } from '../api'
+import { Pokefull } from '../../types'
 import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
 import { useEffect, useState } from 'react'
-import { getPokemonByParams } from '../../utils/getPokemonsByParams'
-import { Card3D } from '../../common/components'
-
-type pokemonData = {
-  id: number
-  name: string
-  sprites: Sprites
-  abilities: Ability
-}
-
+import { getPokemonsByParams } from '../../utils/getPokemonsByParams'
 type PokemonProps = {
-  pokemon: pokemonData
+  pokemon: Pokefull
 }
 
 const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
   const [isFavorite, setIsFavorite] = useState(false)
-
+  const ability = pokemon.abilities.map(value => value.ability.name)
   useEffect(() => {
-    setIsFavorite(isFavoriteIdPokemon(pokemon?.id))
+    setIsFavorite(isFavoriteIdPokemon(pokemon.id))
   }, [])
-
   const handleClick = () => {
-    setFavoritePokemon(pokemon?.id)
+    setFavoritePokemon(pokemon.id)
     setIsFavorite(!isFavorite)
   }
-
   return (
-    <Layout title={pokemon?.name || 'pokemon'}>
-      <div
-        className="w-screen h-screen flex justify-center items-center relative"
-        style={{ perspective: 2000 }}
-      >
-        <Card3D pokemon={pokemon} handleClick={handleClick} />
+    <Layout title={pokemon.name || 'pokemon'}>
+      <div className="grid grid-cols-2 gap-10">
+        <div className="card  lg:card-side bg-white shadow-x">
+          <figure>
+            <Image
+              width={500}
+              height={500}
+              layout="intrinsic"
+              src={pokemon.sprites.other?.dream_world.front_default || 'no-image'}
+              alt="Shoes"
+            />
+          </figure>
+          <div className="card-body">
+            <h2 className="card-title text-5xl">
+              {pokemon.name}
+              <div className="badge badge-secondary">NEW</div>
+            </h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quae accusamus vitae
+              recusandae excepturi, soluta ullam laboriosam, maiores odit totam, natus beatae nisi
+              fugiat inventore cumque nulla iste atque aut.
+            </p>
+            <div className="card-actions justify-end">
+              <button onClick={handleClick} className="btn btn-secondary">
+                {isFavorite ? 'Quit Favorite' : 'set Favorite'}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-center gap-10 bg-white rounded-xl">
+          <figure>
+            <Image
+              width={300}
+              height={300}
+              layout="intrinsic"
+              src={pokemon.sprites.other?.home.front_default || ''}
+              alt="Movie"
+            />
+          </figure>
+          <figure>
+            <Image
+              width={300}
+              height={300}
+              layout="intrinsic"
+              src={pokemon.sprites.other?.home.front_shiny || ''}
+              alt="Movie"
+            />
+          </figure>
+        </div>
       </div>
     </Layout>
   )
@@ -53,14 +86,12 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
 }
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const { id } = ctx.params as { id: string }
+  const { id } = ctx.params?.id as unknown as { id: string }
 
-  const [pokemon, abilities] = (await getPokemonByParams(id)).map(value => value.data)
-
+  const pokemons = getPokemonsByParams(id)
   return {
     props: {
-      pokemon,
-      abilities
+      pokemons
     }
   }
 }

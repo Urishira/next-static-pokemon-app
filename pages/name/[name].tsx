@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Image from 'next/image'
 import React, { FC } from 'react'
 import { Pokefull, PokemonApiTypes } from '../../types'
-import { getPokemonByParams } from '../../utils/getPokemonsByParams'
+import { getPokemonsByParams } from '../../utils/getPokemonsByParams'
 import { pokemonApi } from '../api'
 
 type PokemonData = {
@@ -41,7 +41,7 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
 export const getStaticProps: GetStaticProps = async ctx => {
   const { name } = ctx.params as { name: string }
 
-  const pokemon = await getPokemonByParams(name)
+  const pokemon = await getPokemonsByParams(name)
 
   return {
     props: {

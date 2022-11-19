@@ -14,8 +14,8 @@ export const CardPokemon: FC<CartPokemonProps> = ({ id, img, name, numberPoke })
     route.push(`pokemons/${id}`)
   }
   return (
-    <div className="flex items-center justify-center border-solid border">
-      <figure className="align-top">
+    <div className="grid grid-cols-2 border-solid border-black ">
+      <figure>
         <Image width={200} height={200} layout="intrinsic" src={img} alt={name} />
       </figure>
       <div className="justify-end">
@@ -24,7 +24,7 @@ export const CardPokemon: FC<CartPokemonProps> = ({ id, img, name, numberPoke })
         </h2>
         <p>If a dog chews shoes whose shoes does he choose?</p>
         <div className="card-actions justify-end">
-          <button onClick={handleClickPokemon} className="btn btn-ghost">
+          <button onClick={handleClickPokemon} className="btn btn-warning">
             See More
           </button>
         </div>
