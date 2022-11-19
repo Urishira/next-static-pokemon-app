@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Image from 'next/image'
 import { Layout } from '../../common/layout'
-import { pokemonApi } from '../api'
 import { Pokefull } from '../../types'
 import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
 import { useEffect, useState } from 'react'
@@ -12,7 +11,6 @@ type PokemonProps = {
 
 const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
   const [isFavorite, setIsFavorite] = useState(false)
-  const ability = pokemon.abilities.map(value => value.ability.name)
   useEffect(() => {
     setIsFavorite(isFavoriteIdPokemon(pokemon.id))
   }, [])
@@ -79,6 +77,7 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
   const paths = [...Array(150)].map((value, index) => {
     return { params: { id: `${index + 1}` } }
   })
+
   return {
     paths,
     fallback: false
@@ -86,12 +85,12 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
 }
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const { id } = ctx.params?.id as unknown as { id: string }
+  const { id } = ctx.params as unknown as { id: string }
 
-  const pokemons = getPokemonsByParams(id)
+  const pokemon = await getPokemonsByParams(id)
   return {
     props: {
-      pokemons
+      pokemon
     }
   }
 }
