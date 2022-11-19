@@ -5,6 +5,7 @@ import { pokemonApi } from '../api'
 import { Pokefull } from '../../types'
 import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
 import { useEffect, useState } from 'react'
+import { getPokemonsByParams } from '../../utils/getPokemonsByParams'
 type PokemonProps = {
   pokemon: Pokefull
 }
@@ -85,11 +86,12 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
 }
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const id = ctx.params?.id as unknown as { id: string }
-  const { data: pokemon } = await pokemonApi.get<Pokefull>(`/pokemon/${id}/`)
+  const { id } = ctx.params?.id as unknown as { id: string }
+
+  const pokemons = getPokemonsByParams(id)
   return {
     props: {
-      pokemon
+      pokemons
     }
   }
 }
