@@ -11,7 +11,7 @@ type CartPokemonProps = {
 export const CardPokemon: FC<CartPokemonProps> = ({ id, img, name, numberPoke }) => {
   const route = useRouter()
   const handleClickPokemon = () => {
-    route.push(`pokemons/${id}`)
+    route.push(`pokemons/${name}`)
   }
   return (
     <div className="grid grid-cols-2 border-solid border-black ">

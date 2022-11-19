@@ -1,27 +1,79 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Image from 'next/image'
-import React, { FC } from 'react'
+import { Layout } from '../../common/layout'
 import { Pokefull, PokemonApiTypes } from '../../types'
+import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
+import { useEffect, useState } from 'react'
 import { getPokemonsByParams } from '../../utils/getPokemonsByParams'
 import { pokemonApi } from '../api'
 
-type PokemonData = {
+type PokemonProps = {
   pokemon: Pokefull
 }
-const PokemonByName: FC<PokemonData> = ({ pokemon }) => {
+
+const PokemonName: NextPage<PokemonProps> = ({ pokemon }) => {
+  const [isFavorite, setIsFavorite] = useState(false)
+  useEffect(() => {
+    setIsFavorite(isFavoriteIdPokemon(pokemon.id))
+  }, [])
+  const handleClick = () => {
+    setFavoritePokemon(pokemon.id)
+    setIsFavorite(!isFavorite)
+  }
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="grid grid-rows-1 border border-black w-72 h-48">
-        <Image src={pokemon.sprites.front_default} layout="responsive" width={200} height={200} />
-        <div className="flex flex-col">
-          <h2 className="text-4xl">{pokemon.name}</h2>
-          <p>{pokemon.order}</p>
+    <Layout title={pokemon.name || 'pokemon'}>
+      <div className="grid grid-cols-2 gap-10">
+        <div className="card  lg:card-side bg-white shadow-x">
+          <figure>
+            <Image
+              width={500}
+              height={500}
+              layout="intrinsic"
+              src={pokemon.sprites.other?.dream_world.front_default || 'no-image'}
+              alt="Shoes"
+            />
+          </figure>
+          <div className="card-body">
+            <h2 className="card-title text-5xl">
+              {pokemon.name}
+              <div className="badge badge-secondary">NEW</div>
+            </h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quae accusamus vitae
+              recusandae excepturi, soluta ullam laboriosam, maiores odit totam, natus beatae nisi
+              fugiat inventore cumque nulla iste atque aut.
+            </p>
+            <div className="card-actions justify-end">
+              <button onClick={handleClick} className="btn btn-secondary">
+                {isFavorite ? 'Quit Favorite' : 'set Favorite'}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-center gap-10 bg-white rounded-xl">
+          <figure>
+            <Image
+              width={300}
+              height={300}
+              layout="intrinsic"
+              src={pokemon.sprites.other?.home.front_default || ''}
+              alt="Movie"
+            />
+          </figure>
+          <figure>
+            <Image
+              width={300}
+              height={300}
+              layout="intrinsic"
+              src={pokemon.sprites.other?.home.front_shiny || ''}
+              alt="Movie"
+            />
+          </figure>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
-
 export const getStaticPaths: GetStaticPaths = async ctx => {
   const { data } = await pokemonApi.get<PokemonApiTypes>('/pokemon?limit=150')
   const paths = data.results.map(pokemons => ({ params: { name: pokemons.name } }))
@@ -41,4 +93,4 @@ export const getStaticProps: GetStaticProps = async ctx => {
   }
 }
 
-export default PokemonByName
+export default PokemonName

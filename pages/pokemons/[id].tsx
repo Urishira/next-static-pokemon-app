@@ -5,6 +5,7 @@ import { Pokefull } from '../../types'
 import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
 import { useEffect, useState } from 'react'
 import { getPokemonsByParams } from '../../utils/getPokemonsByParams'
+
 type PokemonProps = {
   pokemon: Pokefull
 }
@@ -80,7 +81,7 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
 
   return {
     paths,
-    fallback: false
+    fallback: 'blocking'
   }
 }
 
@@ -88,10 +89,21 @@ export const getStaticProps: GetStaticProps = async ctx => {
   const { id } = ctx.params as unknown as { id: string }
 
   const pokemon = await getPokemonsByParams(id)
+
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
+
   return {
     props: {
       pokemon
-    }
+    },
+    revalidate: 60
   }
 }
 
