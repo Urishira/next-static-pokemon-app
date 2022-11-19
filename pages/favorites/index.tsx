@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 const Favorites = () => {
   const [favoritesId, setFavoritesId] = useState<number[]>([])
   useEffect(() => {}, [])
-  return <div>sasdsa</div>
+  return <div></div>
 }
 
 export default Favorites
