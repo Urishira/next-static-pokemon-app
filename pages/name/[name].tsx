@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import Image from 'next/image'
 import React, { FC } from 'react'
 import { Pokefull, PokemonApiTypes } from '../../types'
-import { getPokemonsByParams } from '../../utils/getPokemonsByParams'
+import { getPokemonByParams } from '../../utils/getPokemonsByParams'
 import { pokemonApi } from '../api'
 
 type PokemonData = {
@@ -33,7 +33,7 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
 
 export const getStaticProps: GetStaticProps = async ctx => {
   const { name } = ctx.params as unknown as { name: string }
-  const pokemon = getPokemonsByParams(name)
+  const pokemon = getPokemonByParams(name)
   return {
     props: {
       pokemon

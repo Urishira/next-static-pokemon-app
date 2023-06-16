@@ -5,23 +5,26 @@ import { pokemonApi } from '../api'
 import { Pokefull } from '../../types'
 import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
 import { useEffect, useState } from 'react'
-import { getPokemonsByParams } from '../../utils/getPokemonsByParams'
-type PokemonProps = {
-  pokemon: Pokefull
+import { getPokemonByParams } from '../../utils/getPokemonsByParams'
+
+type Pokemon = {
+  id: number
+  name: string
+  sprites: Pick<Pokefull, 'sprites'>
 }
+type PokemonProps = { pokemon: Pokemon }
 
 const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
   const [isFavorite, setIsFavorite] = useState(false)
-  const ability = pokemon.abilities.map(value => value.ability.name)
   useEffect(() => {
-    setIsFavorite(isFavoriteIdPokemon(pokemon.id))
+    setIsFavorite(isFavoriteIdPokemon(pokemon?.id))
   }, [])
   const handleClick = () => {
-    setFavoritePokemon(pokemon.id)
+    setFavoritePokemon(pokemon?.id)
     setIsFavorite(!isFavorite)
   }
   return (
-    <Layout title={pokemon.name || 'pokemon'}>
+    <Layout title={pokemon?.name || 'pokemon'}>
       <div className="grid grid-cols-2 gap-10">
         <div className="card  lg:card-side bg-white shadow-x">
           <figure>
@@ -29,13 +32,13 @@ const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
               width={500}
               height={500}
               layout="intrinsic"
-              src={pokemon.sprites.other?.dream_world.front_default || 'no-image'}
+              src={pokemon?.sprites.sprites.other?.dream_world.front_default || '/no-image'}
               alt="Shoes"
             />
           </figure>
           <div className="card-body">
             <h2 className="card-title text-5xl">
-              {pokemon.name}
+              {pokemon?.name}
               <div className="badge badge-secondary">NEW</div>
             </h2>
             <p>
@@ -56,7 +59,7 @@ const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
               width={300}
               height={300}
               layout="intrinsic"
-              src={pokemon.sprites.other?.home.front_default || ''}
+              src={pokemon?.sprites.sprites.other?.home.front_default || ''}
               alt="Movie"
             />
           </figure>
@@ -65,7 +68,7 @@ const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
               width={300}
               height={300}
               layout="intrinsic"
-              src={pokemon.sprites.other?.home.front_shiny || ''}
+              src={pokemon?.sprites.sprites.other?.home.front_shiny || ''}
               alt="Movie"
             />
           </figure>
@@ -86,12 +89,13 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
 }
 
 export const getStaticProps: GetStaticProps = async ctx => {
-  const { id } = ctx.params?.id as unknown as { id: string }
+  const { id } = ctx.params as { id: string }
 
-  const pokemons = getPokemonsByParams(id)
+  const pokemon = await getPokemonByParams(id)
+
   return {
     props: {
-      pokemons
+      pokemons: pokemon
     }
   }
 }

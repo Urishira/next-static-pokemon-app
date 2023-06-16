@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export const NavbarPokemon = () => {
   return (
-    <nav className="w-full h-5 flex items-center">
+    <nav className="w-full h-5 flex gap-2 items-center">
       <Image
         width={50}
         height={50}
