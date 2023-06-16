@@ -1,7 +1,7 @@
 import { pokemonApi } from '../pages/api'
 import { Pokefull } from '../types'
 
-export const getPokemonsByParams = async (param: string) => {
+export const getPokemonByParams = async (param: string) => {
   const { data: pokemon } = await pokemonApi.get<Pokefull>(`/pokemon/${param}/`)
   return {
     id: pokemon.id,

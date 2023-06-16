@@ -14,11 +14,8 @@ export const Layout: FC<LayoutType> = ({ children, title }) => {
     <>
       <Head>
         <title>{title || 'PokeApp'}</title>
-        <meta property="og:title" content="How to Become an SEO Expert (8 Steps)" />
-        <meta
-          property="og:description"
-          content="Get from SEO newbie to SEO pro in 8 simple steps."
-        />
+        <meta property="og:title" content="Static generation Pokedex" />
+        <meta property="og:description" content="Static generation Pokedex" />
         <meta property="og:image" content={`${origin}/image/pokemon2.jpg`} />
       </Head>
       <NavbarPokemon />
