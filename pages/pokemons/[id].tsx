@@ -6,6 +6,7 @@ import { Pokefull } from '../../types'
 import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
 import { useEffect, useState } from 'react'
 import { getPokemonByParams } from '../../utils/getPokemonsByParams'
+import { useMotionValue, useTransform, motion } from 'framer-motion'
 
 type Pokemon = {
   id: number
@@ -16,6 +17,10 @@ type PokemonProps = { pokemon: Pokemon }
 
 const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
   const [isFavorite, setIsFavorite] = useState(false)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const rotateX = useTransform(y, [-100, 100], [30, -30])
+  const rotateY = useTransform(x, [-100, 100], [-30, 30])
   useEffect(() => {
     setIsFavorite(isFavoriteIdPokemon(pokemon?.id))
   }, [])
@@ -25,54 +30,29 @@ const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
   }
   return (
     <Layout title={pokemon?.name || 'pokemon'}>
-      <div className="grid grid-cols-2 gap-10">
-        <div className="card  lg:card-side bg-white shadow-x">
-          <figure>
+      <div
+        className="w-screen h-screen flex justify-center items-center relative"
+        style={{ perspective: 2000 }}
+      >
+        <motion.div
+          style={{ x, y, rotateX, rotateY, z: 100 }}
+          drag
+          dragElastic={0.18}
+          dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+          className="flex w-96 h-[500px] bg-slate-900 rounded-lg "
+        >
+          <div className="absolute right-20 -left-56 -top-64">
+            {' '}
             <Image
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/10.png"
               width={500}
               height={500}
-              layout="intrinsic"
-              src={pokemon?.sprites.sprites.other?.dream_world.front_default || '/no-image'}
-              alt="Shoes"
+              layout="fixed"
             />
-          </figure>
-          <div className="card-body">
-            <h2 className="card-title text-5xl">
-              {pokemon?.name}
-              <div className="badge badge-secondary">NEW</div>
-            </h2>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus quae accusamus vitae
-              recusandae excepturi, soluta ullam laboriosam, maiores odit totam, natus beatae nisi
-              fugiat inventore cumque nulla iste atque aut.
-            </p>
-            <div className="card-actions justify-end">
-              <button onClick={handleClick} className="btn btn-secondary">
-                {isFavorite ? 'Quit Favorite' : 'set Favorite'}
-              </button>
-            </div>
           </div>
-        </div>
-        <div className="flex items-center justify-center gap-10 bg-white rounded-xl">
-          <figure>
-            <Image
-              width={300}
-              height={300}
-              layout="intrinsic"
-              src={pokemon?.sprites.sprites.other?.home.front_default || ''}
-              alt="Movie"
-            />
-          </figure>
-          <figure>
-            <Image
-              width={300}
-              height={300}
-              layout="intrinsic"
-              src={pokemon?.sprites.sprites.other?.home.front_shiny || ''}
-              alt="Movie"
-            />
-          </figure>
-        </div>
+
+          <button className="">Set favorite</button>
+        </motion.div>
       </div>
     </Layout>
   )
@@ -92,7 +72,7 @@ export const getStaticProps: GetStaticProps = async ctx => {
   const { id } = ctx.params as { id: string }
 
   const pokemon = await getPokemonByParams(id)
-
+  console.log(pokemon)
   return {
     props: {
       pokemons: pokemon

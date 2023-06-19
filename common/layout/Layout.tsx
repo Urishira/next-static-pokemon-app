@@ -19,7 +19,7 @@ export const Layout: FC<LayoutType> = ({ children, title }) => {
         <meta property="og:image" content={`${origin}/image/pokemon2.jpg`} />
       </Head>
       <NavbarPokemon />
-      <main className="bg-black">{children}</main>
+      <main className="bg-slate-600 p-6">{children}</main>
     </>
   )
 }
