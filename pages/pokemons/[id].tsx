@@ -6,7 +6,6 @@ import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPo
 import { useEffect, useState } from 'react'
 import { getPokemonByParams } from '../../utils/getPokemonsByParams'
 import { useMotionValue, useTransform, motion } from 'framer-motion'
-import HeartSvg from '../../common/svgs/heartSVG'
 
 type pokemonData = {
   id: number
@@ -61,7 +60,6 @@ const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
             />
           </motion.div>
 
-          <HeartSvg fill="#fff" className="w-6 -top-72 bottom-0 right-7 absolute" />
           <figure>
             <img
               src={pokemon?.sprites.other?.dream_world.front_default || ''}
