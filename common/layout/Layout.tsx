@@ -7,17 +7,19 @@ type LayoutType = {
   title: string
 }
 
+const origin = typeof window !== 'undefined' ? window.location.origin : ''
+
 export const Layout: FC<LayoutType> = ({ children, title }) => {
   return (
     <>
       <Head>
         <title>{title || 'PokeApp'}</title>
-        <meta name="author" content="Uris" />
-        <meta name="description" content="info about pokemon" />
-        <meta name="keywords" content="pokemon, pokedex" />
+        <meta property="og:title" content="Static generation Pokedex" />
+        <meta property="og:description" content="Static generation Pokedex" />
+        <meta property="og:image" content={`${origin}/image/pokemon2.jpg`} />
       </Head>
       <NavbarPokemon />
-      <main>{children}</main>
+      <main className="bg-slate-600 p-6">{children}</main>
     </>
   )
 }

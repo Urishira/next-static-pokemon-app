@@ -1,25 +1,58 @@
 import React from 'react'
 import Image from 'next/image'
-import { Navbar, Text } from '@nextui-org/react'
+
+import Link from 'next/link'
 
 export const NavbarPokemon = () => {
   return (
-    <Navbar isBordered variant="sticky">
-      <Navbar.Brand>
+    <div className="navbar bg-base-100">
+      <div className="flex-1">
         <Image
-          width={70}
-          height={70}
-          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/132.png"
+          width={50}
+          height={50}
+          layout="fixed"
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/17.png"
+          alt="pokemon"
         />
-        <Text h3 color="inherit" hideIn="xs">
+        <a className="btn btn-ghost normal-case text-xl">Pokemon</a>
+
+        <Link href="/" passHref>
           Pokemon
-        </Text>
-      </Navbar.Brand>
-      <Navbar.Content>
-        <Navbar.Link color="inherit" href="#">
-          Favorites
-        </Navbar.Link>
-      </Navbar.Content>
-    </Navbar>
+        </Link>
+
+        <Link href="/favorites" passHref>
+          Favorite
+        </Link>
+      </div>
+      <div className="flex-none gap-2">
+        <div className="form-control">
+          <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
+        </div>
+        <div className="dropdown dropdown-end">
+          <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+            <div className="w-10 rounded-full">
+              <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+            </div>
+          </label>
+          <ul
+            tabIndex={0}
+            className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a className="justify-between">
+                Profile
+                <span className="badge">New</span>
+              </a>
+            </li>
+            <li>
+              <a>Settings</a>
+            </li>
+            <li>
+              <a>Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   )
 }
