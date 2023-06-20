@@ -11,7 +11,6 @@ type CartPokemonProps = {
 export const CardPokemon: FC<CartPokemonProps> = ({ id, img, name, numberPoke }) => {
   const route = useRouter()
   const handleClickPokemon = () => {
-    console.log(id)
     route.push(`pokemons/${id}`)
   }
   return (
