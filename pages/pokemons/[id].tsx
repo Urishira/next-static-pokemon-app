@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+
 import { Layout } from '../../common/layout'
 import { Ability, Sprites } from '../../types'
 import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
@@ -19,7 +20,6 @@ type PokemonProps = {
 
 const PokemonDetail: NextPage<PokemonProps> = ({ pokemon }) => {
   const [isFavorite, setIsFavorite] = useState(false)
-
   useEffect(() => {
     setIsFavorite(isFavoriteIdPokemon(pokemon?.id))
   }, [])
@@ -48,6 +48,7 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
   return {
     paths,
     fallback: false
+
   }
 }
 
@@ -61,6 +62,19 @@ export const getStaticProps: GetStaticProps = async ctx => {
       pokemon,
       abilities
     }
+
+  const { id } = ctx.params as unknown as { id: string }
+
+  const pokemon = await getPokemonsByParams(id)
+
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
   }
 }
 
