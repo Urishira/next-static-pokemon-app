@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
-
 import { Layout } from '../../common/layout'
 import { Ability, Sprites } from '../../types'
 import { setFavoritePokemon, isFavoriteIdPokemon } from '../../utils/favoritesPokemon'
