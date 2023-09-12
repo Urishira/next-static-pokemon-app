@@ -13,8 +13,8 @@ const FormLayout: React.FC<Props> = ({ children }) => {
           <div className={styles.cloud_one}></div>
           <div className={styles.cloud_two}></div>
         </div>
-        <div className="right flex flex-col justify-evenly">
-          <div className="text-center py-10">{children}</div>
+        <div className="right flex flex-col justify-evenly m-0">
+          <div className="text-center overscroll-auto">{children}</div>
         </div>
       </div>
     </div>
