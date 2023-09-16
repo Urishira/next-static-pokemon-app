@@ -11,30 +11,36 @@ import { useRouter } from 'next/router'
 
 import styles from '../../styles/Form.module.css'
 import FormLayout from './FormLayout'
+import SignUp from './SignUp'
 
-type ValueForm = {
+export type TFormValue = {
   email: string
   password: string
 }
 
 const schema = z.object({
   email: z.string().email({ message: 'this is not a valid email' }),
-  packageName: z.string().min(8, 'this password is invalid')
+  password: z
+    .string()
+    .min(8, 'this password is not invalid')
+    .max(16, 'this password is not valid and must be at least 16 characters')
 })
 
 export default function Login() {
   const [show, setShow] = useState(false)
+  const [showSignUp, setShowSignUp] = useState(false)
   const router = useRouter()
 
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm<ValueForm>({
+    formState: { errors, isDirty, isValid }
+  } = useForm<TFormValue>({
     resolver: zodResolver(schema)
   })
 
-  const onSubmit: SubmitHandler<ValueForm> = async values => {
+  const onSubmit: SubmitHandler<TFormValue> = async values => {
+    console.log(values)
     const status = await signIn('credentials', {
       redirect: false,
       email: values.email,
@@ -48,7 +54,9 @@ export default function Login() {
   async function handleGoogleSignin() {
     signIn('google', { callbackUrl: 'http://localhost:3000' })
   }
-
+  function handleShowSignUp() {
+    setShowSignUp(!showSignUp)
+  }
   return (
     <FormLayout>
       <Head>
@@ -62,49 +70,59 @@ export default function Login() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores, officia?
           </p>
         </div>
+        {!showSignUp ? (
+          <form
+            className="flex flex-col gap-5 animate-fade-down animate-ease-linear"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className={`${styles.input_group} ${errors.email ? 'border-rose-600' : ''}`}>
+              <input
+                type="email"
+                placeholder="Email"
+                className={styles.input_text}
+                {...register('email')}
+              />
+              <span className="icon flex items-center px-4">
+                <HiAtSymbol size={25} />
+              </span>
+            </div>
+            {errors.email?.message ? (
+              <p className="bg-red-600 rounded-md text-gray-50 p-1">{errors.email.message}</p>
+            ) : null}
+            <div className={`${styles.input_group} ${errors.password ? 'border-rose-600' : ''}`}>
+              <input
+                type={`${show ? 'text' : 'password'}`}
+                placeholder="password"
+                className={styles.input_text}
+                {...register('password')}
+              />
+              <span className="icon flex items-center px-4" onClick={() => setShow(!show)}>
+                <HiFingerPrint size={25} />
+              </span>
+            </div>
+            {errors.password?.message ? (
+              <p className="bg-red-600 rounded-md text-gray-50 p-1">{errors.password?.message}</p>
+            ) : null}
 
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
-          <div className={`${styles.input_group} ${errors.email ? 'border-rose-600' : ''}`}>
-            <input
-              type="email"
-              placeholder="Email"
-              className={styles.input_text}
-              {...register('email')}
-            />
-            <span className="icon flex items-center px-4">
-              <HiAtSymbol size={25} />
-            </span>
-          </div>
-
-          <div className={`${styles.input_group} ${errors.password ? 'border-rose-600' : ''}`}>
-            <input
-              type={`${show ? 'text' : 'password'}`}
-              placeholder="password"
-              className={styles.input_text}
-              {...register('password')}
-            />
-            <span className="icon flex items-center px-4" onClick={() => setShow(!show)}>
-              <HiFingerPrint size={25} />
-            </span>
-          </div>
-
-          <div className="input-button">
-            <button type="submit" className={styles.button}>
+            <button disabled={!isDirty || !isValid} className={styles.button}>
               SignIn
             </button>
-          </div>
-          <div className="input-button">
-            <button type="button" onClick={handleGoogleSignin} className={styles.button_custom}>
-              Sign In with Google <Image src={'/assets/google.svg'} width="20" height={20}></Image>
-            </button>
-          </div>
-        </form>
+
+            <div className="input-button">
+              <button type="button" onClick={handleGoogleSignin} className={styles.button_custom}>
+                Sign In with Google
+              </button>
+            </div>
+          </form>
+        ) : (
+          <SignUp setShow={setShow} show={show} />
+        )}
 
         <p className="text-center text-gray-400 ">
           don't have an account yet?{' '}
-          <Link href={'/signup'}>
-            <a className="text-blue-700">Sign Up</a>
-          </Link>
+          <span className="text-blue-700 cursor-pointer hover:border-b" onClick={handleShowSignUp}>
+            Sign Up
+          </span>
         </p>
       </section>
     </FormLayout>
