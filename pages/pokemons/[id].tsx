@@ -81,7 +81,12 @@ export const getStaticPaths: GetStaticPaths = async ctx => {
 
   return {
     paths,
+<<<<<<< HEAD
     fallback: 'blocking'
+=======
+    fallback: false
+
+>>>>>>> 9b53a6764f60172b9a99851c38a7e82fe3cb0bdf
   }
 }
 
@@ -101,9 +106,28 @@ export const getStaticProps: GetStaticProps = async ctx => {
 
   return {
     props: {
+<<<<<<< HEAD
       pokemon
     },
     revalidate: 60
+=======
+      pokemon,
+      abilities
+    }
+
+  const { id } = ctx.params as unknown as { id: string }
+
+  const pokemon = await getPokemonsByParams(id)
+
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
+>>>>>>> 9b53a6764f60172b9a99851c38a7e82fe3cb0bdf
   }
 }
 
