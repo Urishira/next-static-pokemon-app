@@ -100,4 +100,4 @@ export const getStaticProps: GetStaticProps = async ctx => {
   }
 }
 
-export default PokemonByName
+export default PokemonName
